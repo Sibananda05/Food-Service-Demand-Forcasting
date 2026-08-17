@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demand Forecast - CampusFoodAI</title>
+</head>
+
+<body>
+
+    <h1>Food Demand Forecast</h1>
+
+    <p>Enter the information for the day you want to forecast.</p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label>Attendance:</label>
+        <input type="number" name="attendance" required>
+
+        <br><br>
+
+        <label>Temperature (°C):</label>
+        <input type="number" step="0.1" name="temperature" required>
+
+        <br><br>
+
+        <label>Rainfall (mm):</label>
+        <input type="number" step="0.1" name="rainfall" required>
+
+        <br><br>
+
+        <label>Holiday:</label>
+        <select name="holiday">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <br><br>
+
+        <label>Day of Week:</label>
+        <select name="day_of_week">
+
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">Predict Demand</button>
+
+    </form>
+
+    {% if prediction %}
+
+        <hr>
+
+        <h2>Demand Forecast</h2>
+
+        <p>
+            Predicted Demand:
+            <strong>{{ prediction }} meals</strong>
+        </p>
+
+        <p>
+            Recommended Preparation:
+            <strong>{{ recommended }} meals</strong>
+        </p>
+
+    {% endif %}
+
+</body>
+</html>

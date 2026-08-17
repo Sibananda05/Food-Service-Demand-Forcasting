@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Demand Prediction | Smart Food Service</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #e8f5e9,
+                #f1f8e9
+            );
+
+            color: #333;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            background: #2e7d32;
+
+            padding: 18px 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            color: white;
+
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+        nav .links {
+            display: flex;
+
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 90%;
+
+            max-width: 850px;
+
+            margin: 45px auto;
+        }
+
+
+        /* ================= TITLE ================= */
+
+        .title {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            color: #1b5e20;
+
+            font-size: 32px;
+
+            margin-bottom: 10px;
+        }
+
+        .title p {
+            color: #666;
+
+            font-size: 16px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================= CARD ================= */
+
+        .card {
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.12);
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+
+            border-color: #2e7d32;
+
+            box-shadow:
+                0 0 0 3px rgba(46,125,50,0.12);
+        }
+
+
+        /* ================= WEATHER SECTION ================= */
+
+        .weather-box {
+            background: #f1f8e9;
+
+            border: 1px solid #a5d6a7;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .weather-box h2 {
+            color: #1b5e20;
+
+            font-size: 20px;
+
+            margin-bottom: 15px;
+        }
+
+        .weather-row {
+            display: grid;
+
+            grid-template-columns: 1fr auto;
+
+            gap: 10px;
+        }
+
+        .weather-button {
+            padding: 13px 20px;
+
+            background: #388e3c;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .weather-button:hover {
+            background: #1b5e20;
+        }
+
+        .weather-result {
+            margin-top: 15px;
+
+            padding: 15px;
+
+            background: white;
+
+            border-radius: 8px;
+
+            color: #555;
+
+            line-height: 1.7;
+        }
+
+        .weather-result strong {
+            color: #1b5e20;
+        }
+
+        .weather-error {
+            margin-top: 12px;
+
+            color: #c62828;
+
+            font-weight: bold;
+        }
+
+
+        /* ================= BUTTON ================= */
+
+        .predict-button {
+            width: 100%;
+
+            padding: 14px;
+
+            background: #2e7d32;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+        }
+
+        .predict-button:hover {
+            background: #1b5e20;
+        }
+
+
+        /* ================= RESULT ================= */
+
+        .result {
+            margin-top: 30px;
+
+            padding: 25px;
+
+            background: #e8f5e9;
+
+            border-left: 5px solid #2e7d32;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .result h2 {
+            color: #1b5e20;
+
+            margin-bottom: 18px;
+        }
+
+        .prediction-value {
+            font-size: 38px;
+
+            font-weight: bold;
+
+            color: #2e7d32;
+
+            margin-bottom: 15px;
+        }
+
+        .recommended {
+            font-size: 18px;
+
+            color: #444;
+        }
+
+        .recommended strong {
+            color: #1b5e20;
+        }
+
+
+        /* ================= ERROR ================= */
+
+        .error {
+            margin-top: 20px;
+
+            padding: 15px;
+
+            background: #ffebee;
+
+            border-left: 5px solid #c62828;
+
+            border-radius: 8px;
+
+            color: #c62828;
+
+            font-weight: bold;
+        }
+
+
+        /* ================= INFO ================= */
+
+        .info {
+            margin-top: 25px;
+
+            padding: 18px;
+
+            background: #f5f5f5;
+
+            border-radius: 8px;
+
+            color: #666;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+
+            color: #777;
+
+            padding: 25px;
+
+            margin-top: 25px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            nav .links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 15px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .title h1 {
+                font-size: 27px;
+            }
+
+            .weather-row {
+                grid-template-columns: 1fr;
+            }
+
+            .weather-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        🍽️ Smart Food Service
+    </div>
+
+    <div class="links">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'predict' %}">
+            Demand Prediction
+        </a>
+
+        <a href="{% url 'food_safety' %}">
+            Food Safety
+        </a>
+
+        <a href="{% url 'surplus_list' %}">
+            Surplus Food
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h1>
+            📊 Food Demand Prediction
+        </h1>
+
+        <p>
+            Use machine learning and real-time weather
+            information to estimate food demand.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <!-- ================================================== -->
+        <!-- PREDICTION FORM -->
+        <!-- ================================================== -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- ================= WEATHER ================= -->
+
+            <div class="weather-box">
+
+                <h2>
+                    🌤️ Live Weather Information
+                </h2>
+
+                <div class="weather-row">
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter city e.g. Bhubaneswar"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="weather-button"
+                        onclick="getWeather()"
+                    >
+                        🌦️ Get Weather
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="weatherResult"
+                    class="weather-result"
+                    style="display: none;"
+                >
+
+                    <div>
+                        📍 City:
+                        <strong id="weatherCity"></strong>
+                    </div>
+
+                    <div>
+                        🌡️ Temperature:
+                        <strong>
+                            <span id="weatherTemperature"></span> °C
+                        </strong>
+                    </div>
+
+                    <div>
+                        🌧️ Rainfall:
+                        <strong>
+                            <span id="weatherRainfall"></span> mm
+                        </strong>
+                    </div>
+
+                    <div>
+                        ☁️ Weather:
+                        <strong id="weatherDescription"></strong>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="weatherError"
+                    class="weather-error"
+                ></div>
+
+            </div>
+
+
+            <!-- ================= ATTENDANCE ================= -->
+
+            <div class="form-group">
+
+                <label for="attendance">
+                    👥 Expected Attendance
+                </label>
+
+                <input
+                    type="number"
+                    id="attendance"
+                    name="attendance"
+                    placeholder="Enter expected attendance"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= TEMPERATURE ================= -->
+
+            <div class="form-group">
+
+                <label for="temperature">
+                    🌡️ Temperature (°C)
+                </label>
+
+                <input
+                    type="number"
+                    id="temperature"
+                    name="temperature"
+                    step="0.1"
+                    placeholder="Get weather or enter manually"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= RAINFALL ================= -->
+
+            <div class="form-group">
+
+                <label for="rainfall">
+                    🌧️ Rainfall (mm)
+                </label>
+
+                <input
+                    type="number"
+                    id="rainfall"
+                    name="rainfall"
+                    step="0.1"
+                    min="0"
+                    value="0"
+                    placeholder="Get weather or enter manually"
+                    required
+                >
+
+            </div>
+
+
+            <!-- ================= HOLIDAY ================= -->
+
+            <div class="form-group">
+
+                <label for="holiday">
+                    🎉 Holiday
+                </label>
+
+                <select
+                    id="holiday"
+                    name="holiday"
+                    required
+                >
+
+                    <option value="0">
+                        No
+                    </option>
+
+                    <option value="1">
+                        Yes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= DAY OF WEEK ================= -->
+
+            <div class="form-group">
+
+                <label for="day_of_week">
+                    📅 Day of Week
+                </label>
+
+                <select
+                    id="day_of_week"
+                    name="day_of_week"
+                    required
+                >
+
+                    <option value="0">
+                        Monday
+                    </option>
+
+                    <option value="1">
+                        Tuesday
+                    </option>
+
+                    <option value="2">
+                        Wednesday
+                    </option>
+
+                    <option value="3">
+                        Thursday
+                    </option>
+
+                    <option value="4">
+                        Friday
+                    </option>
+
+                    <option value="5">
+                        Saturday
+                    </option>
+
+                    <option value="6">
+                        Sunday
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= PREDICT BUTTON ================= -->
+
+            <button
+                type="submit"
+                class="predict-button"
+            >
+                🔮 Predict Food Demand
+            </button>
+
+        </form>
+
+
+        <!-- ================= ERROR ================= -->
+
+        {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= RESULT ================= -->
+
+        {% if prediction is not None %}
+
+        <div class="result">
+
+            <h2>
+                🎯 Prediction Result
+            </h2>
+
+            <div class="prediction-value">
+                {{ prediction }}
+            </div>
+
+            <div class="recommended">
+
+                Recommended Food Preparation:
+
+                <strong>
+                    {{ recommended }}
+                </strong>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= INFORMATION ================= -->
+
+        <div class="info">
+
+            <strong>
+                💡 How it works:
+            </strong>
+
+            <br><br>
+
+            1. Enter the expected attendance.
+
+            <br>
+
+            2. Enter a city and get real-time
+            weather information.
+
+            <br>
+
+            3. Temperature and rainfall are
+            automatically used for prediction.
+
+            <br>
+
+            4. Select whether the day is a holiday.
+
+            <br>
+
+            5. Select the day of the week.
+
+            <br>
+
+            6. The machine learning model estimates
+            the required number of meals.
+
+            <br>
+
+            7. The system recommends approximately
+            5% extra preparation to handle unexpected demand.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    Smart Food Service Management System © 2026
+
+</footer>
+
+
+<!-- ================= WEATHER JAVASCRIPT ================= -->
+
+<script>
+
+async function getWeather() {
+
+    const city =
+        document.getElementById("city").value.trim();
+
+    const result =
+        document.getElementById("weatherResult");
+
+    const error =
+        document.getElementById("weatherError");
+
+
+    error.innerText = "";
+
+    result.style.display = "none";
+
+
+    if (!city) {
+
+        error.innerText =
+            "Please enter a city name.";
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "{% url 'weather_data' %}?city="
+            + encodeURIComponent(city)
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || data.error) {
+
+            error.innerText =
+                data.error ||
+                "Unable to get weather information.";
+
+            return;
+        }
+
+
+        document.getElementById(
+            "weatherCity"
+        ).innerText = data.city;
+
+
+        document.getElementById(
+            "weatherTemperature"
+        ).innerText = data.temperature;
+
+
+        document.getElementById(
+            "weatherRainfall"
+        ).innerText = data.rainfall;
+
+
+        document.getElementById(
+            "weatherDescription"
+        ).innerText = data.weather;
+
+
+        /*
+         * Put live weather values
+         * into the prediction form.
+         */
+
+        document.getElementById(
+            "temperature"
+        ).value = data.temperature;
+
+
+        document.getElementById(
+            "rainfall"
+        ).value = data.rainfall;
+
+
+        result.style.display = "block";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "weatherError"
+        ).innerText =
+            "Unable to connect to the weather service.";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+

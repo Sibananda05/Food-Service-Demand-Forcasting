@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Surplus Food | Smart Food Service</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #e8f5e9,
+                #f1f8e9
+            );
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: #2e7d32;
+            padding: 18px 8%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav div:last-child {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* MAIN CONTAINER */
+
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 45px auto;
+        }
+
+
+        /* TITLE */
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            color: #1b5e20;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .title p {
+            color: #666;
+            font-size: 16px;
+        }
+
+
+        /* CARD */
+
+        .card {
+            background: white;
+            padding: 35px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.12);
+        }
+
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+
+            border-color: #2e7d32;
+
+            box-shadow:
+                0 0 0 3px rgba(46,125,50,0.12);
+        }
+
+
+        /* HELP TEXT */
+
+        .help-text {
+            margin-top: 6px;
+
+            font-size: 13px;
+
+            color: #777;
+        }
+
+
+        /* ERRORS */
+
+        .error {
+            color: #d32f2f;
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+        .form-errors {
+            background: #ffebee;
+
+            border-left: 5px solid #d32f2f;
+
+            padding: 15px;
+
+            margin-bottom: 20px;
+
+            border-radius: 7px;
+
+            color: #b71c1c;
+        }
+
+
+        /* BUTTONS */
+
+        .buttons {
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        .submit-btn {
+            flex: 1;
+
+            padding: 14px;
+
+            background: #2e7d32;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #1b5e20;
+        }
+
+        .cancel-btn {
+            flex: 1;
+
+            padding: 14px;
+
+            background: #eeeeee;
+
+            color: #333;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+        .cancel-btn:hover {
+            background: #dddddd;
+        }
+
+
+        /* INFO BOX */
+
+        .info-box {
+            margin-top: 25px;
+
+            padding: 18px;
+
+            background: #e8f5e9;
+
+            border-left: 5px solid #2e7d32;
+
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #1b5e20;
+
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+
+            color: #777;
+
+            margin-top: 30px;
+
+            padding: 20px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            nav div:last-child {
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 15px;
+            }
+
+            .title h1 {
+                font-size: 26px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        🍽️ Smart Food Service
+    </div>
+
+    <div>
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'predict' %}">
+            Demand Prediction
+        </a>
+
+        <a href="{% url 'food_safety' %}">
+            Food Safety
+        </a>
+
+        <a href="{% url 'surplus_list' %}">
+            Surplus Food
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h1>
+            🍱 Add Surplus Food
+        </h1>
+
+        <p>
+            Record excess food and check its safety
+            before redistribution.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <!-- FORM ERRORS -->
+
+        {% if form.non_field_errors %}
+
+            <div class="form-errors">
+
+                {{ form.non_field_errors }}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ================= FORM ================= -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- FOOD NAME -->
+
+            <div class="form-group">
+
+                <label for="{{ form.food_name.id_for_label }}">
+                    Food Name
+                </label>
+
+                {{ form.food_name }}
+
+                {% for error in form.food_name.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="form-group">
+
+                <label for="{{ form.quantity.id_for_label }}">
+                    Quantity
+                </label>
+
+                {{ form.quantity }}
+
+                <div class="help-text">
+                    Enter the quantity of surplus food available.
+                </div>
+
+                {% for error in form.quantity.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- STORAGE TEMPERATURE -->
+
+            <div class="form-group">
+
+                <label for="{{ form.storage_temperature.id_for_label }}">
+                    Storage Temperature (°C)
+                </label>
+
+                {{ form.storage_temperature }}
+
+                <div class="help-text">
+                    Food is considered safe when stored at
+                    5°C or below.
+                </div>
+
+                {% for error in form.storage_temperature.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- STORAGE TIME -->
+
+            <div class="form-group">
+
+                <label for="{{ form.storage_time_hours.id_for_label }}">
+                    Storage Time (Hours)
+                </label>
+
+                {{ form.storage_time_hours }}
+
+                <div class="help-text">
+                    Food is considered safe when stored for
+                    24 hours or less.
+                </div>
+
+                {% for error in form.storage_time_hours.errors %}
+
+                    <div class="error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    ➕ Add Surplus Food
+                </button>
+
+
+                <a
+                    href="{% url 'surplus_list' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <!-- ================= INFORMATION ================= -->
+
+        <div class="info-box">
+
+            <h3>
+                🛡️ Food Safety Rule
+            </h3>
+
+            <p>
+                The system automatically checks the storage
+                temperature and storage duration.
+                Food stored at <strong>5°C or below</strong>
+                for <strong>24 hours or less</strong> is
+                marked as <strong>SAFE</strong>.
+                Otherwise, it is marked as
+                <strong>UNSAFE</strong>.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    Smart Food Service Management System © 2026
+
+</footer>
+
+
+</body>
+
+</html>
+

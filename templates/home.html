@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Food Service Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #e8f5e9,
+                #f1f8e9
+            );
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            background: #2e7d32;
+            padding: 18px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            color: white;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        nav .links {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            width: 90%;
+            max-width: 1100px;
+
+            margin: 55px auto 35px;
+
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            color: #1b5e20;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 750px;
+            margin: auto;
+
+            font-size: 18px;
+            line-height: 1.7;
+
+            color: #666;
+        }
+
+        .hero-btn {
+            display: inline-block;
+
+            margin-top: 25px;
+
+            padding: 14px 28px;
+
+            background: #2e7d32;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .hero-btn:hover {
+            background: #1b5e20;
+        }
+
+
+        /* ================= FEATURES ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+
+            margin: 40px auto;
+        }
+
+        .section-title {
+            text-align: center;
+
+            color: #1b5e20;
+
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.10);
+
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 40px;
+
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #1b5e20;
+
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+
+            line-height: 1.5;
+
+            font-size: 14px;
+
+            margin-bottom: 18px;
+        }
+
+        .card a {
+            display: inline-block;
+
+            padding: 9px 16px;
+
+            background: #2e7d32;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .card a:hover {
+            background: #1b5e20;
+        }
+
+
+        /* ================= ABOUT ================= */
+
+        .about {
+            background: white;
+
+            margin-top: 45px;
+
+            padding: 30px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 6px 20px rgba(0,0,0,0.08);
+
+            text-align: center;
+        }
+
+        .about h2 {
+            color: #1b5e20;
+
+            margin-bottom: 12px;
+        }
+
+        .about p {
+            color: #666;
+
+            line-height: 1.7;
+
+            max-width: 850px;
+
+            margin: auto;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+
+            color: #777;
+
+            padding: 30px 15px;
+
+            margin-top: 40px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 900px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            nav .links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        🍽️ Smart Food Service
+    </div>
+
+    <div class="links">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'predict' %}">
+            Demand Prediction
+        </a>
+
+        <a href="{% url 'food_safety' %}">
+            Food Safety
+        </a>
+
+        <a href="{% url 'surplus_list' %}">
+            Surplus Food
+        </a>
+
+        <a href="{% url 'recipient_list' %}">
+            Recipients
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>
+        🍽️ Smart Food Service Management
+    </h1>
+
+    <p>
+        An intelligent system that helps organizations
+        forecast food demand, reduce food wastage,
+        verify surplus food safety and redistribute
+        safe surplus food to those who need it.
+    </p>
+
+    <a
+        href="{% url 'predict' %}"
+        class="hero-btn"
+    >
+        📊 Start Demand Forecast
+    </a>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<div class="container">
+
+    <h2 class="section-title">
+        System Features
+    </h2>
+
+
+    <div class="cards">
+
+
+        <!-- DEMAND -->
+
+        <div class="card">
+
+            <div class="icon">
+                📊
+            </div>
+
+            <h3>
+                Demand Forecasting
+            </h3>
+
+            <p>
+                Use machine learning to estimate
+                future food demand based on
+                attendance, weather and holidays.
+            </p>
+
+            <a href="{% url 'predict' %}">
+                Predict Demand
+            </a>
+
+        </div>
+
+
+        <!-- SAFETY -->
+
+        <div class="card">
+
+            <div class="icon">
+                🛡️
+            </div>
+
+            <h3>
+                Food Safety
+            </h3>
+
+            <p>
+                Check whether stored surplus food
+                is safe for redistribution using
+                temperature and storage duration.
+            </p>
+
+            <a href="{% url 'food_safety' %}">
+                Check Safety
+            </a>
+
+        </div>
+
+
+        <!-- SURPLUS -->
+
+        <div class="card">
+
+            <div class="icon">
+                🍱
+            </div>
+
+            <h3>
+                Surplus Management
+            </h3>
+
+            <p>
+                Record excess food and automatically
+                determine whether it can be
+                redistributed.
+            </p>
+
+            <a href="{% url 'add_surplus' %}">
+                Add Surplus
+            </a>
+
+        </div>
+
+
+        <!-- REDISTRIBUTION -->
+
+        <div class="card">
+
+            <div class="icon">
+                ♻️
+            </div>
+
+            <h3>
+                Redistribution
+            </h3>
+
+            <p>
+                Redistribute safe surplus food
+                to registered recipients and
+                reduce unnecessary food waste.
+            </p>
+
+            <a href="{% url 'surplus_list' %}">
+                Manage Food
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ================= ABOUT ================= -->
+
+    <div class="about">
+
+        <h2>
+            🌱 Our Goal
+        </h2>
+
+        <p>
+            The Smart Food Service Management System
+            combines machine learning and food safety
+            rules to reduce food wastage. By predicting
+            demand more accurately and identifying safe
+            surplus food, the system helps organizations
+            prepare the right amount of food and
+            redistribute excess food responsibly.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    Smart Food Service Management System © 2026
+
+</footer>
+
+
+</body>
+
+</html>
+

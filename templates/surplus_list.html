@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Surplus Food Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: #f4f7f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1b5e20;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .add-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #555;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .food-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .food-card h2 {
+            margin-top: 0;
+        }
+
+        .safe {
+            color: green;
+            font-weight: bold;
+        }
+
+        .unsafe {
+            color: red;
+            font-weight: bold;
+        }
+
+        .pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .redistributed {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .redistribute-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 14px;
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .redistribution-box {
+            margin-top: 15px;
+            padding: 20px;
+            background: #eef5ff;
+            border-radius: 8px;
+        }
+
+        .redistribution-box input,
+        .redistribution-box select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        .redistribution-box button {
+            padding: 10px 18px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>
+        🍱 Surplus Food Management
+    </h1>
+
+
+    <div class="top-buttons">
+
+        <a
+            href="{% url 'add_surplus' %}"
+            class="add-btn"
+        >
+            + Add New Surplus Food
+        </a>
+
+        <a
+            href="{% url 'home' %}"
+            class="home-btn"
+        >
+            Home
+        </a>
+
+    </div>
+
+
+    <hr>
+
+
+    {% if surplus_foods %}
+
+        {% for food in surplus_foods %}
+
+            <div class="food-card">
+
+                <h2>
+                    {{ food.food_name }}
+                </h2>
+
+
+                <p>
+                    <strong>Quantity:</strong>
+                    {{ food.quantity }}
+                </p>
+
+
+                <p>
+                    <strong>Storage Temperature:</strong>
+                    {{ food.storage_temperature }} °C
+                </p>
+
+
+                <p>
+                    <strong>Storage Time:</strong>
+                    {{ food.storage_time_hours }} hours
+                </p>
+
+
+                <p>
+
+                    <strong>Status:</strong>
+
+                    {% if food.status == "SAFE" %}
+
+                        <span class="safe">
+                            SAFE
+                        </span>
+
+                    {% elif food.status == "UNSAFE" %}
+
+                        <span class="unsafe">
+                            UNSAFE
+                        </span>
+
+                    {% elif food.status == "REDISTRIBUTED" %}
+
+                        <span class="redistributed">
+                            REDISTRIBUTED
+                        </span>
+
+                    {% else %}
+
+                        <span class="pending">
+                            PENDING
+                        </span>
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if food.status == "SAFE" %}
+
+                    {% if selected_food.id == food.id %}
+
+                        <div class="redistribution-box">
+
+                            <h3>
+                                Redistribute {{ food.food_name }}
+                            </h3>
+
+                            <form method="POST">
+
+                                {% csrf_token %}
+
+                                {{ redistribution_form.as_p }}
+
+                                <button type="submit">
+                                    Confirm Redistribution
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'redistribute' food.id %}"
+                            class="redistribute-btn"
+                        >
+                            Redistribute Food
+                        </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <h3>
+                No surplus food available.
+            </h3>
+
+            <p>
+                Add surplus food to see it here.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
